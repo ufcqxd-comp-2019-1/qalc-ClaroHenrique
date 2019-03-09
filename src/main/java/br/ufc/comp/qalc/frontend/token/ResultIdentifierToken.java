@@ -36,7 +36,6 @@ public class ResultIdentifierToken extends Token {
      */
     public long getResultNumber() {
         interpretAttributes();
-
         return resultNumber;
     }
 

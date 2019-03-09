@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/QALC.iml" filepath="$PROJECT_DIR$/QALC.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qalc-interpreter.iml" filepath="$PROJECT_DIR$/qalc-interpreter.iml" />
     </modules>
   </component>
 </project>

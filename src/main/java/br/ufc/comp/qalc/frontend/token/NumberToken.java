@@ -11,6 +11,7 @@ public class NumberToken extends Token {
      *
      * @see #interpretAttributes()
      */
+
     protected double numericValue;
 
     public NumberToken(long line, long start, String value) throws IllegalArgumentException {
@@ -23,6 +24,7 @@ public class NumberToken extends Token {
      *
      * @see Token#interpretAttributes()
      */
+
     @Override
     public void interpretAttributes() {
         if (stringValue != null) {
