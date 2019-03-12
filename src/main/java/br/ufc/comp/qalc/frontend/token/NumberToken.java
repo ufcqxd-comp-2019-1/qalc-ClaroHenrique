@@ -40,7 +40,6 @@ public class NumberToken extends Token {
      */
     public double getNumericValue() {
         interpretAttributes();
-
         return numericValue;
     }
 

@@ -1,9 +1,6 @@
 package br.ufc.comp.qalc.frontend;
 
-import br.ufc.comp.qalc.frontend.token.EOFToken;
-import br.ufc.comp.qalc.frontend.token.VariableIdentifierToken;
-import br.ufc.comp.qalc.frontend.token.NumberToken;
-import br.ufc.comp.qalc.frontend.token.Token;
+import br.ufc.comp.qalc.frontend.token.*;
 
 import java.io.IOException;
 
@@ -46,6 +43,16 @@ public class Scanner {
      */
     public Token getNextToken() throws IOException {
 
+        while(source.getCurrentChar() == ' '){
+            source.advance();
+        }
+
+        if (source.getCurrentChar() == '#') { // comentario
+            do {
+                source.advance();
+            } while (source.getCurrentChar() != '\n' && source.getCurrentChar() != Source.EOF);
+        }
+
         if (source.getCurrentChar() == Source.EOF) {
             return new EOFToken(source.getCurrentLine(), source.getCurrentColumn());
             /////////////////////////////////////////////////////
@@ -71,38 +78,133 @@ public class Scanner {
             String stringValue = lexema.toString();
             return new NumberToken(currentLine, lexemeStart, stringValue);
             /////////////////////////////////////////////////////
+
         }else if (source.getCurrentChar() == '$'){ // VariableIdentifierToken
             StringBuilder lexema = new StringBuilder();
 
             long currentLine = source.getCurrentLine();
             long lexemeStart = source.getCurrentColumn();
 
-            do{
-                lexema.append(source.getCurrentChar());
-                source.advance();
-            }while (Character.isAlphabetic(source.getCurrentChar()) );
+            lexema.append(source.getCurrentChar());
+            source.advance();
 
-            String stringValue = lexema.toString();
-            return new VariableIdentifierToken(currentLine,lexemeStart,stringValue);
+            if(Character.isAlphabetic(source.getCurrentChar())) { //caso variável
+                do{
+                    lexema.append(source.getCurrentChar());
+                    source.advance();
+                }while ( Character.isAlphabetic(source.getCurrentChar()));
+                String stringValue = lexema.toString();
+                return new VariableIdentifierToken(currentLine,lexemeStart,stringValue);
+
+            }else { //caso seja um indenficador de resultado ????
+
+                if(source.getCurrentChar() == '?'){
+                    lexema.append(source.getCurrentChar());
+                    source.advance();
+                    String stringValue = lexema.toString();
+                    return new VariableIdentifierToken(currentLine,lexemeStart,stringValue);
+                }
+
+                do{
+                    lexema.append(source.getCurrentChar());
+                    source.advance();
+                }while ( Character.isDigit(source.getCurrentChar()));
+                String stringValue = lexema.toString();
+                return new VariableIdentifierToken(currentLine,lexemeStart,stringValue);
+
+            }
+
             /////////////////////////////////////////////////////
-        }else if (source.getCurrentChar() == '@'){ // FunctionIdentifierToken
+
+        }else if (source.getCurrentChar() == '@') { // FunctionIdentifierToken
             StringBuilder lexema = new StringBuilder();
 
             long currentLine = source.getCurrentLine();
             long lexemeStart = source.getCurrentColumn();
 
-            do{
+            do {
                 lexema.append(source.getCurrentChar());
                 source.advance();
-            }while (Character.isAlphabetic(source.getCurrentChar()) );
+            } while (Character.isAlphabetic(source.getCurrentChar()));
 
             String stringValue = lexema.toString();
-            return new VariableIdentifierToken(currentLine,lexemeStart,stringValue);
+            return new VariableIdentifierToken(currentLine, lexemeStart, stringValue);
+
+        }else if (source.getCurrentChar() == '=') {
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new AtribToken(currentLine, lexemeStart);
+
+        }else if (source.getCurrentChar() == '+') {
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new PlusToken(currentLine, lexemeStart);
+
+        }else if (source.getCurrentChar() == '-') {
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new MinusToken(currentLine, lexemeStart);
+
+        }else if (source.getCurrentChar() == '*') {
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new TimesToken(currentLine, lexemeStart);
+
+        }else if (source.getCurrentChar() == '/') {
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new DivToken(currentLine, lexemeStart);
+
+        }else if (source.getCurrentChar() == '%') {
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new ModToken(currentLine, lexemeStart);
+
+        }else if (source.getCurrentChar() == '^') {
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new PowToken(currentLine, lexemeStart);
+
+        }else if (source.getCurrentChar() == '(') {
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new LParenToken(currentLine, lexemeStart);
+
+        }else if (source.getCurrentChar() == ')') {
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new LParenToken(currentLine, lexemeStart);
+
+        }else if (source.getCurrentChar() == ',') {
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new CommaToken(currentLine, lexemeStart);
+
+        }else if (source.getCurrentChar() == ';') {
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new SemiToken(currentLine, lexemeStart);
+
+        }else if(source.getCurrentChar() == '\n'){
+            long currentLine = source.getCurrentLine();
+            long lexemeStart = source.getCurrentColumn();
+            source.advance();
+            return new BreakLineToken(currentLine, lexemeStart);
         }
 
 
-        // TODO Recuperação de erros.
-
+        System.out.println("pora");
         return null;
     }
 

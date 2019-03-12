@@ -16,7 +16,9 @@ public class VariableIdentifierToken extends Token {
      */
     @Override
     public void interpretAttributes() {
-        // TODO Se o lexema ainda existir e ainda não tiver sido interpretado, descartar o `$`.
+        if (stringValue != null && stringValue.charAt(0) == '$') {
+            stringValue = stringValue.substring(1);
+        }
     }
 
     /**

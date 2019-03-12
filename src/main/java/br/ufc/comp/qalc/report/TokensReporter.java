@@ -50,9 +50,21 @@ public class TokensReporter extends BasicReporter {
     public void consume(Message message) {
         if (message instanceof NewTokenMessage) {
             try {
-                // TODO Alterar para aumentar as informações de acordo com a variável `verbosity`.
-                //      (Ver Javadoc desta função.)
-                output.write(String.format("(%s)\n", ((NewTokenMessage) message).getToken().getTokenIdentifier()));
+                // TODO verbosity;
+
+                output.write(String.format("(%s", ((NewTokenMessage) message).getToken().getTokenIdentifier()) );
+
+                if(super.verbosity == OutputVerbosity.ADDITIONAL_INFO || super.verbosity == OutputVerbosity.EVERYTHING){
+                    output.write(String.format(",%s", ((NewTokenMessage) message).getToken().toString()));
+                }
+                if(super.verbosity == OutputVerbosity.EVERYTHING) {
+                    output.write(String.format(",L: %d, C: %d-%d",
+                            ((NewTokenMessage) message).getToken().getLineNumber(),
+                            ((NewTokenMessage) message).getToken().getColumnStart(),
+                            ((NewTokenMessage) message).getToken().getColumnEnd()     ));
+                }
+                output.write(String.format(")\n"));
+
             } catch (IOException e) {
                 reportFailure(e);
             }

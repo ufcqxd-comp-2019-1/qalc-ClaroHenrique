@@ -2,10 +2,18 @@ package br.ufc.comp.qalc.report;
 
 import br.ufc.comp.qalc.report.messages.Message;
 
+
+
+
+
+
 /**
  * Interface que modela objetos que são capazes de consumir mensagens
  * enviadas através de {@link MessageCenter}.
  */
+
+
+
 public interface MessageConsumer {
 
     /**

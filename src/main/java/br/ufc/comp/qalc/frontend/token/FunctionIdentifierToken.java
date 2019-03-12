@@ -14,6 +14,7 @@ public class FunctionIdentifierToken extends Token {
      *
      * @see Token#interpretAttributes()
      */
+
     @Override
     public void interpretAttributes() {
         if (stringValue != null && stringValue.charAt(0) == '@') {
@@ -28,7 +29,6 @@ public class FunctionIdentifierToken extends Token {
      */
     public String getFunctionIdentifier() {
         interpretAttributes();
-
         return stringValue;
     }
 

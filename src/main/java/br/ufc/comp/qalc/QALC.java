@@ -1,14 +1,16 @@
 package br.ufc.comp.qalc;
 
+import br.ufc.comp.qalc.frontend.Scanner;
+import br.ufc.comp.qalc.frontend.Source;
+import br.ufc.comp.qalc.frontend.token.EOFToken;
 import br.ufc.comp.qalc.report.MessageCenter;
 import br.ufc.comp.qalc.report.TokensReporter;
 import br.ufc.comp.qalc.report.messages.MessageCategory;
+import br.ufc.comp.qalc.report.messages.NewTokenMessage;
 import picocli.CommandLine;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
+
 
 /**
  * Classe principal do interpretador.
@@ -16,6 +18,7 @@ import java.io.OutputStream;
  * Contém a função {@link QALC#main(String[])} e as definições de interpretação
  * dos parâmetros de execução.
  */
+
 @CommandLine.Command(
         versionProvider = VersionProvider.class,
         description = "Interpretador para a linguagem QALC.",
@@ -25,6 +28,7 @@ import java.io.OutputStream;
         parameterListHeading = "%nParâmetros:%n",
         optionListHeading = "%nOpções:%n"
 )
+
 public class QALC {
 
     @CommandLine.Option(
@@ -44,6 +48,7 @@ public class QALC {
     /**
      * Indica a última fase que o usuário deseja executar no interpretador.
      */
+
     @CommandLine.Option(
             names = {"-s", "--stop-at"},
             paramLabel = "PHASE",
@@ -104,6 +109,7 @@ public class QALC {
                 // Alterar esta porção do código
                 // ---->
 
+                InputStream inputToStream = qalc.readFrom == null ? System.in : new FileInputStream(qalc.readFrom);
                 OutputStream outputToStream = qalc.outputTo == null ? System.out : new FileOutputStream(qalc.outputTo);
 
                 // WARNING: Apenas a última fase deve gerar saída.
@@ -113,6 +119,14 @@ public class QALC {
                                 MessageCategory.SCANNING,
                                 new TokensReporter(outputToStream, qalc.outputVerbosity)
                         );
+                        Scanner scan = new Scanner(new Source(inputToStream));
+
+                        do{
+                            NewTokenMessage m = new NewTokenMessage(scan.getNextToken());
+                            MessageCenter.deliver( m );
+                            if(m.getToken() instanceof EOFToken) break;
+                        }while(true);
+
                         break;
                     case PARSER:
                         // TODO
@@ -134,8 +148,8 @@ public class QALC {
                     // Fase de Análise Léxica deve ser executada
                     // TODO Executar análise léxica
                 }
-                // TODO Verificar e executar demais fases
 
+                // TODO Verificar e executar demais fases
                 // TODO Retornar código de erro correspondente às falhas que ocorrerem, via `System.exit(...)`;
 
                 // <----
@@ -170,7 +184,7 @@ public class QALC {
             System.err.println("Não foi possível executar a ação solicitada.");
             ex.printStackTrace();
         } finally {
-            ResourcesManager.shutdown(true);
+           ResourcesManager.shutdown(true);
         }
     }
 }

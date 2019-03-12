@@ -7,6 +7,7 @@ import br.ufc.comp.qalc.frontend.token.Token;
  * <p>
  * Esta mensagem se origina obrigatoriamente da Análise Léxica.
  */
+
 public class NewTokenMessage extends Message {
 
     protected final Token token;

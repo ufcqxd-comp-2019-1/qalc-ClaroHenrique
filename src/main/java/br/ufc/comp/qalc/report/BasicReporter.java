@@ -38,6 +38,7 @@ public class BasicReporter implements MessageConsumer {
      * @param stream    Fluxo de saída a ser usado.
      * @param verbosity Nível de verbosidade na saída gerada.
      */
+
     public BasicReporter(OutputStream stream, OutputVerbosity verbosity) {
         this.output = new OutputStreamWriter(stream);
         this.verbosity = verbosity;
@@ -73,6 +74,7 @@ public class BasicReporter implements MessageConsumer {
      *
      * @param e Exceção encontrada.
      */
+
     protected void reportFailure(IOException e) {
         System.err.println("Erro ao reportar mensagem.");
         e.printStackTrace();
